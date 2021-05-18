@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="2" time="13.134">
+<testcase classname="test" name="Test For test 2" time="7.263">
+<system-out><![CDATA[Given I am on ebay home page................................................passed
+Then i See homepage.........................................................passed
+]]></system-out>
+</testcase>
+<testcase classname="test" name="Test For test 2 2" time="5.697">
+<system-out><![CDATA[Given I am on ebay home page................................................passed
+Then i See homepage.........................................................passed
+]]></system-out>
+</testcase>
+</testsuite>
