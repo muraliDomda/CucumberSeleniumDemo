@@ -1,4 +1,4 @@
-Feature: test
+Feature: test2
 
   @t1
   Scenario: Test For test1
