@@ -11,32 +11,50 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <test.tag>@feature1</test.tag>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <version.cucumber>2.3.0</version.cucumber>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>6.10.4</version>
-        </dependency>
-        <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
-            <version>6.10.4</version>
+            <version>${version.cucumber}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${version.cucumber}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.5.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-picocontainer</artifactId>
-            <version>6.10.4</version>
-            <scope>test</scope>
+            <artifactId>cucumber-core</artifactId>
+            <version>${version.cucumber}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-support</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>3.141.59</version>
+        </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
@@ -47,33 +65,56 @@
             <artifactId>maven-cucumber-reporting</artifactId>
             <version>5.3.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.141.59</version>
+       <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>13.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.playwright</groupId>
-            <artifactId>playwright</artifactId>
-            <version>1.11.1</version>
-        </dependency>
-
-
-
-<!--        <dependency>-->
-<!--            <groupId>io.cucumber</groupId>-->
-<!--            <artifactId>cucumber-core</artifactId>-->
-<!--            <version>6.10.4</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.cucumber</groupId>-->
-<!--            <artifactId>gherkin</artifactId>-->
-<!--            <version>19.0.0</version>-->
-<!--        </dependency>-->
-
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.github.temyers</groupId>
+                <artifactId>cucumber-jvm-parallel-plugin</artifactId>
+                <version>5.0.0</version>
+                <executions>
+                    <execution>
+                        <id>generateRunners</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>generateRunners</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Mandatory -->
+                            <!-- List of package names to scan for glue code. -->
+                            <glue>
+                                <package>com.testing</package>
+                            </glue>
+                            <outputDirectory>${project.build.directory}/generated-test-sources/cucumber
+                            </outputDirectory>
+                            <featuresDirectory>src/test/resources/features/</featuresDirectory>
+                            <cucumberOutputDir>target/cucumber-parallel</cucumberOutputDir>
+                            <plugins>
+<!--                                <plugin>-->
+<!--                                    <name>json</name>-->
+<!--                                </plugin>-->
+                                <!--                                <plugin>-->
+                                <!--                                    <name>com.example.CustomHtmlFormatter</name>-->
+                                <!--                                    <extension>html</extension>-->
+                                <!--                                </plugin>-->
+                            </plugins>
+                            <parallelScheme>SCENARIO</parallelScheme>
+                            <tags>
+                                <tag>~@WIP</tag>
+                                <tag>${test.tag}</tag>
+
+                            </tags>
+                            <namingScheme>simple</namingScheme>
+                            <monochrome>true</monochrome>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -83,7 +124,6 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-
             </plugin>
 
             <plugin>
@@ -102,8 +142,8 @@
                             </includes>
 
                             <useUnlimitedThreads>true</useUnlimitedThreads>
-                                <parallel>classes</parallel>
-                                <threadCount>4</threadCount>
+                            <parallel>classes</parallel>
+                            <threadCount>4</threadCount>
                         </configuration>
                     </execution>
                 </executions>
@@ -113,37 +153,95 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
-                    <configuration>
-                        <parallel>methods</parallel>
-<!--                        <threadCountClasses>2</threadCountClasses>-->
-                        <useUnlimitedThreads>true</useUnlimitedThreads>
-                        <testFailureIgnore>true</testFailureIgnore>
-                        <includes>
-                            <include>.*TestRunner.java</include>
-                        </includes>
-                    </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.22.0</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>execution-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <testFailureIgnore>true</testFailureIgnore>
+                            <includes>
+                                <include>**/Parallel*IT.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/Report.java</exclude>
+                            </excludes>
+                            <perCoreThreadCount>false</perCoreThreadCount>
+                            <parallel>classes</parallel>
+                            <threadCount>5</threadCount>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-report</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <testFailureIgnore>true</testFailureIgnore>
+                            <includes>
+                                <include>**/Report.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>net.masterthought</groupId>-->
+<!--                <artifactId>maven-cucumber-reporting</artifactId>-->
+<!--                <version>2.8.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>execution</id>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>${project.build.directory}/masterthought-report</outputDirectory>-->
+<!--                            <cucumberOutput>${project.build.directory}/json-report/cucumber.json</cucumberOutput>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
-                <version>2.8.0</version>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <id>execution</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                            <projectName>sporthighlightsautomation</projectName>
                             <outputDirectory>${project.build.directory}/masterthought-report</outputDirectory>
-                            <cucumberOutput>${project.build.directory}/json-report/cucumber.json</cucumberOutput>
+                            <cucumberOutput>target/cucumber-parallel/</cucumberOutput>
+                            <parallelTesting>true</parallelTesting>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-    </plugins>
+        </plugins>
     </build>
 
 </project>
