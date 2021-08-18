@@ -43,27 +43,25 @@ public class WebElementHelper {
 
 
 
-//    public void waitForPageToCompleteState(){
-//        int counter = 0;
-//        int maxNoOfEntries=5;
-//        while(maxNoOfEntries >0 && counter!=maxNoOfEntries){
-//            try{
-//
-//            }
-//            catch(Exception e){
-//
-//            }
-//        }
-//    )
-//    }
-
     public WebElement getWebElement(By locator) {
         try {
-            waitHelper.waitForSpinnerToDisappear(explicitTime, pollingInterval);
+//            waitHelper.waitForSpinnerToDisappear(explicitTime, pollingInterval);
             return waitHelper.waitForElement(locator, explicitTime, pollingInterval);
         } catch (StaleElementReferenceException exception) {
-            waitHelper.waitForSpinnerToDisappear(explicitTime, pollingInterval);
+//            waitHelper.waitForSpinnerToDisappear(explicitTime, pollingInterval);
             return waitHelper.waitForElement(locator, explicitTime, pollingInterval);
         }
     }
+
+    public WebElementHelper clickElement(By locator) {
+        this.getWebElement(locator).click();
+        return this;
+    }
+
+    public WebElementHelper setText(By locator, String text) {
+        this.getWebElement(locator).sendKeys(text);
+        return this;
+    }
+
+
 }

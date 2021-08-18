@@ -24,11 +24,6 @@ Feature: Feature 1
       | Dell    |
 
 
-
-
-
-
-
 #
 #  @t2
 #  Scenario Outline: Test For test2
