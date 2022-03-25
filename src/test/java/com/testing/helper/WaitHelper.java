@@ -28,6 +28,9 @@ public class WaitHelper {
     @Value(value = "${pageLoadWaitTime}")
     int pageLoadWaitTime;
 
+
+    @Autowired
+    @Lazy
     private WebDriver driver;
 
     @Autowired

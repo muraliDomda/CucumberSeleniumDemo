@@ -34,6 +34,9 @@ public class WebDriverHooks {
     @Value(value = "${pageLoadWaitTime}")
     int pageLoadWaitTime;
 
+    @Value(value = "${macChromeDriverPath}")
+    String macChromeDriverPath;
+
     private WebDriver driver;
 
     @Autowired
@@ -44,7 +47,7 @@ public class WebDriverHooks {
     @Before(order = 1)
     public void setUp(Scenario scenario) throws InterruptedException {
         TestApplication.scenarioThreadLocal.set(scenario);
-        System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", macChromeDriverPath);
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(implicitTime, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(pageLoadWaitTime,TimeUnit.SECONDS);
@@ -55,7 +58,6 @@ public class WebDriverHooks {
         TestApplication.driverThreadLocal.set(edriver);
 
     }
-
 
 
     @After(order = 1)

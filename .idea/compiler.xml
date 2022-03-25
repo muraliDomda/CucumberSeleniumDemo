@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="cucumberTest" />
         <module name="cucumberFramework" />
+        <module name="cucumberSeleniumDemo" />
       </profile>
     </annotationProcessing>
   </component>

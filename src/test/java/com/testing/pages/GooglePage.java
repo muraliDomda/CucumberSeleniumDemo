@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ import java.util.List;
 @Component
 @ContextConfiguration(classes = {TestApplication.class})
 @PropertySource("classpath:application.properties")
+
+
 public class GooglePage {
 
 
@@ -34,8 +37,8 @@ public class GooglePage {
 
 
     public GooglePage enterTextInsSearchInput(String searchString){
-//        webElementHelper.setText(googleSearchInput,searchString);
-        driver.findElement(googleSearchInput).sendKeys(searchString);
+        webElementHelper.setText(googleSearchInput,searchString);
+//        driver.findElement(googleSearchInput).sendKeys(searchString);
         return this;
     }
 
